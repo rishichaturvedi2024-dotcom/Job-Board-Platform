@@ -78,6 +78,8 @@ npm run build
 
 The root `index.html` redirects to `client/build/index.html`, so the deployed site is served correctly from the required Pages configuration.
 
+The root `404.html` also redirects unknown URLs back to the app entry, so refreshes or deep links resolve safely on GitHub Pages.
+
 ## Notes
 
 - All source code, assets, and dependencies are included in one public repository.
