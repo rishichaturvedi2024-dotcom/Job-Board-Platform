@@ -9,6 +9,15 @@ import { Job } from '../types';
 
 const PAGE_SIZE = 10;
 
+const normalizeLocation = (value: string): string => {
+    const normalized = value.trim().toLowerCase().replace(/\s+/g, '');
+    if (['bangalore', 'bangaluru', 'banglore', 'banglor'].includes(normalized)) {
+        return 'banglore';
+    }
+
+    return normalized;
+};
+
 const HomePage: React.FC = () => {
     const [jobs, setJobs] = useState<Job[]>([]);
     const [loading, setLoading] = useState(true);
@@ -58,8 +67,12 @@ const HomePage: React.FC = () => {
             job.title.toLowerCase().includes(searchQuery) ||
             job.company.toLowerCase().includes(searchQuery) ||
             job.description.toLowerCase().includes(searchQuery);
+        const normalizedFilterLocation = normalizeLocation(locationFilter);
+        const normalizedJobLocation = normalizeLocation(job.location);
         const matchesLocation =
-            !locationFilter || job.location.toLowerCase().includes(locationFilter);
+            !normalizedFilterLocation ||
+            normalizedJobLocation.includes(normalizedFilterLocation) ||
+            normalizedFilterLocation.includes(normalizedJobLocation);
         const matchesJobType =
             !jobTypeFilter || job.jobType.toLowerCase() === jobTypeFilter;
 
@@ -86,7 +99,7 @@ const HomePage: React.FC = () => {
                     Filter by role type and location in seconds.
                 </p>
                 <div className="hero-actions">
-                    <a href="#open-roles" className="btn btn-primary">Explore Roles</a>
+                    <Link to="/explore-roles" className="btn btn-primary">Explore Roles</Link>
                     <Link to="/saved-jobs" className="btn btn-ghost">View Saved Jobs</Link>
                 </div>
             </section>

@@ -29,7 +29,7 @@ const JobFilters: React.FC<JobFiltersProps> = ({ onFilterChange }) => {
                     value={location}
                     onChange={handleLocationChange}
                     className="field-input"
-                    placeholder="Remote, Bangalore, Delhi..."
+                    placeholder="Remote, Banglore, Delhi..."
                 />
             </div>
             <div className="filter-field">

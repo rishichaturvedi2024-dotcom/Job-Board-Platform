@@ -125,6 +125,24 @@ export const fetchSavedJobs = async (): Promise<Job[]> => {
     }
 };
 
+export const clearSavedJobs = async (): Promise<{ message: string }> => {
+    const savedIds = getSavedJobIds();
+    setSavedJobIds([]);
+
+    if (!API_BASE_URL) {
+        return { message: 'Saved jobs cleared locally.' };
+    }
+
+    try {
+        await Promise.all(
+            savedIds.map((id) => axios.delete(`${API_BASE_URL}/savedJobs/${id}`))
+        );
+        return { message: 'Saved jobs cleared successfully.' };
+    } catch {
+        return { message: 'Saved jobs cleared locally.' };
+    }
+};
+
 // Backward-compatible aliases used by older imports.
 export const getJobDetails = fetchJobDetails;
 export const getSavedJobs = fetchSavedJobs;

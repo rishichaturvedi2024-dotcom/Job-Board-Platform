@@ -48,7 +48,7 @@ const companyNames = [
 
 const locations = [
     'Remote',
-    'Bangalore',
+    'Banglore',
     'Delhi',
     'Mumbai',
     'Pune',
@@ -74,7 +74,7 @@ const salaryRanges = [
 
 const jobTypes = ['full-time', 'part-time', 'contract', 'internship'];
 
-const generatedOpenRoles: Job[] = Array.from({ length: 100 }, (_, index) => {
+const generatedOpenRoles: Job[] = Array.from({ length: 200 }, (_, index) => {
     const id = `${index + 5}`;
     const title = roleTitles[index % roleTitles.length];
     const company = companyNames[index % companyNames.length];
@@ -110,7 +110,7 @@ export const mockJobs: Job[] = [
         id: '2',
         title: 'Backend Engineer',
         description: 'Design robust APIs and data services using Node.js.',
-        location: 'Bangalore',
+        location: 'Banglore',
         jobType: 'full-time',
         company: 'CoreStack Systems',
         postedDate: '2026-03-19',
