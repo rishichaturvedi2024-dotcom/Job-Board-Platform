@@ -23,8 +23,7 @@ class ApplicationsController {
                 res.status(201).json({ message: 'Application submitted successfully', application: newApplication });
             }
             catch (error) {
-                const message = error instanceof Error ? error.message : 'Unknown server error';
-                res.status(500).json({ message: 'Error submitting application', error: message });
+                res.status(500).json({ message: 'Error submitting application', error: error.message });
             }
         });
     }
@@ -35,8 +34,7 @@ class ApplicationsController {
                 res.status(200).json(applications);
             }
             catch (error) {
-                const message = error instanceof Error ? error.message : 'Unknown server error';
-                res.status(500).json({ message: 'Error retrieving applications', error: message });
+                res.status(500).json({ message: 'Error retrieving applications', error: error.message });
             }
         });
     }

@@ -7,8 +7,9 @@ exports.setApplicationsRoutes = void 0;
 const express_1 = require("express");
 const applications_controller_1 = __importDefault(require("../controllers/applications.controller"));
 const router = (0, express_1.Router)();
-router.post('/', applications_controller_1.default.submitApplication);
-router.get('/', applications_controller_1.default.getApplications);
+const applicationsController = new applications_controller_1.default();
+router.post('/apply', applicationsController.submitApplication);
+router.get('/applications', applicationsController.getApplications);
 const setApplicationsRoutes = (app) => {
     app.use('/api/applications', router);
 };
