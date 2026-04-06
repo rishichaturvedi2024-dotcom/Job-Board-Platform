@@ -1,12 +1,13 @@
-import { Express, Router } from 'express';
-import savedJobsController from '../controllers/savedJobs.controller';
+import { Router } from 'express';
+import SavedJobsController from '../controllers/savedJobs.controller';
 
 const router = Router();
+const savedJobsController = new SavedJobsController();
 
 router.post('/', savedJobsController.saveJob);
 router.get('/', savedJobsController.getSavedJobs);
 router.delete('/:id', savedJobsController.deleteSavedJob);
 
-export function setSavedJobsRoutes(app: Express): void {
-    app.use('/api/savedJobs', router);
+export default function setSavedJobsRoutes(app) {
+    app.use('/api/saved-jobs', router);
 }

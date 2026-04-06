@@ -1,11 +1,12 @@
-import { Express, Router } from 'express';
-import applicationsController from '../controllers/applications.controller';
+import { Router } from 'express';
+import ApplicationsController from '../controllers/applications.controller';
 
 const router = Router();
+const applicationsController = new ApplicationsController();
 
-router.post('/', applicationsController.submitApplication);
-router.get('/', applicationsController.getApplications);
+router.post('/apply', applicationsController.submitApplication);
+router.get('/applications', applicationsController.getApplications);
 
-export const setApplicationsRoutes = (app: Express): void => {
+export const setApplicationsRoutes = (app) => {
     app.use('/api/applications', router);
 };
