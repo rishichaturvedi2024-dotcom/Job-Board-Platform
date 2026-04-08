@@ -6,12 +6,10 @@ import SavedJobsPage from './pages/SavedJobsPage';
 import ExploreRolesPage from './pages/ExploreRolesPage';
 import ApplicationsPage from './pages/ApplicationsPage';
 
-type ThemeMode = 'light' | 'dark';
-
 const THEME_KEY = 'theme-mode';
 
 const App = () => {
-    const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
+    const [themeMode, setThemeMode] = useState(() => {
         const storedTheme = window.localStorage.getItem(THEME_KEY);
         return storedTheme === 'dark' ? 'dark' : 'light';
     });

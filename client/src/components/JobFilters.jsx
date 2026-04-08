@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 
-interface JobFiltersProps {
-    onFilterChange: (location: string, jobType: string) => void;
-}
-
-const JobFilters: React.FC<JobFiltersProps> = ({ onFilterChange }) => {
+const JobFilters = ({ onFilterChange }) => {
     const [location, setLocation] = useState('');
     const [jobType, setJobType] = useState('');
 
-    const handleLocationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleLocationChange = (e) => {
         setLocation(e.target.value);
         onFilterChange(e.target.value, jobType);
     };
 
-    const handleJobTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleJobTypeChange = (e) => {
         setJobType(e.target.value);
         onFilterChange(location, e.target.value);
     };

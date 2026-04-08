@@ -1,25 +1,12 @@
 import React, { useState } from 'react';
 
-export interface ApplicationFormData {
-    jobId: string;
-    name: string;
-    email: string;
-    resume: File | null;
-    coverLetter: string;
-}
-
-interface ApplicationFormProps {
-    jobId: string;
-    onSubmit: (applicationData: ApplicationFormData) => void | Promise<void>;
-}
-
-const ApplicationForm: React.FC<ApplicationFormProps> = ({ jobId, onSubmit }) => {
+const ApplicationForm = ({ jobId, onSubmit }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [resume, setResume] = useState<File | null>(null);
+    const [resume, setResume] = useState(null);
     const [coverLetter, setCoverLetter] = useState('');
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         const applicationData = {
             jobId,

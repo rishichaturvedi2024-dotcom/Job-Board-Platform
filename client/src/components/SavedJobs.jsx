@@ -1,13 +1,7 @@
 import React from 'react';
-import { Job } from '../types';
 import JobCard from './JobCard';
 
-interface SavedJobsProps {
-    jobs: Job[];
-}
-
-const SavedJobs: React.FC<SavedJobsProps> = ({ jobs }) => {
-
+const SavedJobs = ({ jobs }) => {
     return (
         <div className="jobs-feed">
             {jobs.length === 0 ? (

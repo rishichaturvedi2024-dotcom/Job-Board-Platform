@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import SavedJobs from '../components/SavedJobs';
 import { clearSavedJobs, fetchSavedJobs } from '../services/api';
-import { Job } from '../types';
 
-const SavedJobsPage: React.FC = () => {
-    const [savedJobs, setSavedJobs] = useState<Job[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [message, setMessage] = useState<string>('');
+const SavedJobsPage = () => {
+    const [savedJobs, setSavedJobs] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [message, setMessage] = useState('');
 
     useEffect(() => {
         const loadSavedJobs = async () => {

@@ -1,18 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchTrackedApplications, fetchJobs, updateApplicationStatus } from '../services/api';
-import type { Application, Job } from '../types';
 
-const statusOptions: Application['status'][] = ['applied', 'reviewed', 'shortlisted', 'rejected'];
+const statusOptions = ['applied', 'reviewed', 'shortlisted', 'rejected'];
 
-const formatStatus = (status: Application['status']): string =>
-    status.charAt(0).toUpperCase() + status.slice(1);
+const formatStatus = (status) => status.charAt(0).toUpperCase() + status.slice(1);
 
-const ApplicationsPage: React.FC = () => {
-    const [applications, setApplications] = useState<Application[]>([]);
-    const [jobs, setJobs] = useState<Job[]>([]);
+const ApplicationsPage = () => {
+    const [applications, setApplications] = useState([]);
+    const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState(null);
     const [message, setMessage] = useState('');
 
     useEffect(() => {
@@ -35,12 +33,12 @@ const ApplicationsPage: React.FC = () => {
     }, []);
 
     const jobsById = useMemo(() => {
-        const map = new Map<string, Job>();
+        const map = new Map();
         jobs.forEach((job) => map.set(job.id, job));
         return map;
     }, [jobs]);
 
-    const handleStatusChange = async (applicationId: string, status: Application['status']) => {
+    const handleStatusChange = async (applicationId, status) => {
         try {
             await updateApplicationStatus(applicationId, status);
             setApplications((prev) =>
@@ -111,9 +109,7 @@ const ApplicationsPage: React.FC = () => {
                                         id={`status-${application.id}`}
                                         className="field-input"
                                         value={application.status}
-                                        onChange={(event) =>
-                                            handleStatusChange(application.id, event.target.value as Application['status'])
-                                        }
+                                        onChange={(event) => handleStatusChange(application.id, event.target.value)}
                                     >
                                         {statusOptions.map((status) => (
                                             <option key={status} value={status}>

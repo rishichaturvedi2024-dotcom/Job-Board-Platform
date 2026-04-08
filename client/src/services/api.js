@@ -1,22 +1,11 @@
 import axios from 'axios';
-import { Application, Job } from '../types';
 import { mockJobs } from '../data/mockJobs';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 const SAVED_JOB_IDS_KEY = 'saved-job-ids';
 const APPLICATIONS_KEY = 'submitted-applications';
 
-type ApplicationStatus = Application['status'];
-
-interface SubmittedApplicationInput {
-    jobId: string;
-    name: string;
-    email: string;
-    resume: File | null;
-    coverLetter: string;
-}
-
-const normalizeStoredApplications = (value: unknown): Application[] => {
+const normalizeStoredApplications = (value) => {
     if (!Array.isArray(value)) {
         return [];
     }
@@ -27,11 +16,7 @@ const normalizeStoredApplications = (value: unknown): Application[] => {
                 return null;
             }
 
-            const application = entry as Partial<Application> & {
-                name?: string;
-                email?: string;
-                resumeName?: string;
-            };
+            const application = entry;
 
             return {
                 id: String(application.id ?? `local-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`),
@@ -41,13 +26,13 @@ const normalizeStoredApplications = (value: unknown): Application[] => {
                 resume: String(application.resume ?? application.resumeName ?? 'No file'),
                 coverLetter: application.coverLetter ?? '',
                 submittedAt: String(application.submittedAt ?? new Date().toISOString()),
-                status: (application.status ?? 'applied') as ApplicationStatus,
-            } as Application;
+                status: application.status ?? 'applied',
+            };
         })
-        .filter((item): item is Application => Boolean(item?.jobId && item.applicantName && item.applicantEmail));
+        .filter((item) => Boolean(item?.jobId && item.applicantName && item.applicantEmail));
 };
 
-const getStoredApplications = (): Application[] => {
+const getStoredApplications = () => {
     const currentApplications = window.localStorage.getItem(APPLICATIONS_KEY);
     if (!currentApplications) {
         return [];
@@ -60,28 +45,28 @@ const getStoredApplications = (): Application[] => {
     }
 };
 
-const setStoredApplications = (applications: Application[]): void => {
+const setStoredApplications = (applications) => {
     window.localStorage.setItem(APPLICATIONS_KEY, JSON.stringify(applications));
 };
 
-const getSavedJobIds = (): string[] => {
+const getSavedJobIds = () => {
     const stored = window.localStorage.getItem(SAVED_JOB_IDS_KEY);
     if (!stored) {
         return [];
     }
 
     try {
-        return JSON.parse(stored) as string[];
+        return JSON.parse(stored);
     } catch {
         return [];
     }
 };
 
-const setSavedJobIds = (ids: string[]): void => {
+const setSavedJobIds = (ids) => {
     window.localStorage.setItem(SAVED_JOB_IDS_KEY, JSON.stringify(ids));
 };
 
-const getLocalJobs = (filters?: { location?: string; jobType?: string }): Job[] => {
+const getLocalJobs = (filters) => {
     if (!filters) {
         return mockJobs;
     }
@@ -97,35 +82,35 @@ const getLocalJobs = (filters?: { location?: string; jobType?: string }): Job[] 
     });
 };
 
-export const fetchJobs = async (filters?: { location?: string; jobType?: string }): Promise<Job[]> => {
+export const fetchJobs = async (filters) => {
     if (!API_BASE_URL) {
         return getLocalJobs(filters);
     }
 
     try {
-        const response = await axios.get<Job[]>(`${API_BASE_URL}/jobs`, { params: filters });
+        const response = await axios.get(`${API_BASE_URL}/jobs`, { params: filters });
         return response.data;
     } catch {
         return getLocalJobs(filters);
     }
 };
 
-export const fetchJobDetails = async (jobId: string): Promise<Job | null> => {
+export const fetchJobDetails = async (jobId) => {
     if (!API_BASE_URL) {
         return mockJobs.find((job) => job.id === jobId) ?? null;
     }
 
     try {
-        const response = await axios.get<Job>(`${API_BASE_URL}/jobs/${jobId}`);
+        const response = await axios.get(`${API_BASE_URL}/jobs/${jobId}`);
         return response.data;
     } catch {
         return mockJobs.find((job) => job.id === jobId) ?? null;
     }
 };
 
-export const submitApplication = async (applicationData: unknown): Promise<{ message: string }> => {
-    const input = applicationData as SubmittedApplicationInput;
-    const localApplication: Application = {
+export const submitApplication = async (applicationData) => {
+    const input = applicationData;
+    const localApplication = {
         id: `app-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
         jobId: input.jobId,
         applicantName: input.name,
@@ -145,7 +130,7 @@ export const submitApplication = async (applicationData: unknown): Promise<{ mes
     }
 
     try {
-        const response = await axios.post<{ message: string }>(`${API_BASE_URL}/applications`, applicationData);
+        const response = await axios.post(`${API_BASE_URL}/applications`, applicationData);
         const parsed = getStoredApplications();
         parsed.push(localApplication);
         setStoredApplications(parsed);
@@ -159,13 +144,13 @@ export const submitApplication = async (applicationData: unknown): Promise<{ mes
     }
 };
 
-export const fetchTrackedApplications = async (): Promise<Application[]> => {
+export const fetchTrackedApplications = async () => {
     if (!API_BASE_URL) {
         return getStoredApplications();
     }
 
     try {
-        const response = await axios.get<Application[]>(`${API_BASE_URL}/applications`);
+        const response = await axios.get(`${API_BASE_URL}/applications`);
         const normalized = normalizeStoredApplications(response.data);
         if (normalized.length > 0) {
             setStoredApplications(normalized);
@@ -178,10 +163,7 @@ export const fetchTrackedApplications = async (): Promise<Application[]> => {
     }
 };
 
-export const updateApplicationStatus = async (
-    applicationId: string,
-    status: ApplicationStatus
-): Promise<{ message: string }> => {
+export const updateApplicationStatus = async (applicationId, status) => {
     const current = getStoredApplications();
     const updated = current.map((application) =>
         application.id === applicationId ? { ...application, status } : application
@@ -200,7 +182,7 @@ export const updateApplicationStatus = async (
     }
 };
 
-export const saveJob = async (jobId: string): Promise<{ message: string }> => {
+export const saveJob = async (jobId) => {
     const savedIds = getSavedJobIds();
     if (!savedIds.includes(jobId)) {
         savedIds.push(jobId);
@@ -219,7 +201,7 @@ export const saveJob = async (jobId: string): Promise<{ message: string }> => {
     }
 };
 
-export const fetchSavedJobs = async (): Promise<Job[]> => {
+export const fetchSavedJobs = async () => {
     const savedIds = getSavedJobIds();
 
     if (!API_BASE_URL) {
@@ -227,7 +209,7 @@ export const fetchSavedJobs = async (): Promise<Job[]> => {
     }
 
     try {
-        const response = await axios.get<{ jobId: string }[]>(`${API_BASE_URL}/savedJobs`);
+        const response = await axios.get(`${API_BASE_URL}/savedJobs`);
         const idsFromApi = response.data.map((item) => item.jobId);
         setSavedJobIds(idsFromApi);
 
@@ -237,7 +219,7 @@ export const fetchSavedJobs = async (): Promise<Job[]> => {
     }
 };
 
-export const clearSavedJobs = async (): Promise<{ message: string }> => {
+export const clearSavedJobs = async () => {
     const savedIds = getSavedJobIds();
     setSavedJobIds([]);
 
@@ -255,6 +237,5 @@ export const clearSavedJobs = async (): Promise<{ message: string }> => {
     }
 };
 
-// Backward-compatible aliases used by older imports.
 export const getJobDetails = fetchJobDetails;
 export const getSavedJobs = fetchSavedJobs;

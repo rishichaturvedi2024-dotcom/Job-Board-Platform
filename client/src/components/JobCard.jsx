@@ -1,13 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Job } from '../types';
 
-interface JobCardProps {
-    job: Job;
-    onSave?: (jobId: string) => void;
-}
-
-const JobCard: React.FC<JobCardProps> = ({ job, onSave }) => {
+const JobCard = ({ job, onSave }) => {
     const handleSave = () => {
         if (onSave) {
             onSave(job.id);

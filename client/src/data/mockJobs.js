@@ -1,5 +1,3 @@
-import { Job } from '../types';
-
 const roleTitles = [
     'Frontend Engineer',
     'Backend Developer',
@@ -74,7 +72,7 @@ const salaryRanges = [
 
 const jobTypes = ['full-time', 'part-time', 'contract', 'internship'];
 
-const generatedOpenRoles: Job[] = Array.from({ length: 200 }, (_, index) => {
+const generatedOpenRoles = Array.from({ length: 200 }, (_, index) => {
     const id = `${index + 5}`;
     const title = roleTitles[index % roleTitles.length];
     const company = companyNames[index % companyNames.length];
@@ -95,7 +93,7 @@ const generatedOpenRoles: Job[] = Array.from({ length: 200 }, (_, index) => {
     };
 });
 
-export const mockJobs: Job[] = [
+export const mockJobs = [
     {
         id: '1',
         title: 'Frontend Developer',

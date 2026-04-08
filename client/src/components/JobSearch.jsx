@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-const JobSearch: React.FC<{ onSearch: (query: string) => void }> = ({ onSearch }) => {
+const JobSearch = ({ onSearch }) => {
     const [searchQuery, setSearchQuery] = useState('');
 
-    const handleSearch = (event: React.FormEvent) => {
+    const handleSearch = (event) => {
         event.preventDefault();
         onSearch(searchQuery);
     };

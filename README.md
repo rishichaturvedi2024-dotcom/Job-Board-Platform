@@ -1,6 +1,6 @@
 # Job Board Platform
 
-Professional job listing platform where users can browse open roles, search by keywords, filter by location and job type, view role details, save jobs, and apply.
+Professional job listing platform where users can browse open roles, search by keywords, filter by location and job type, view role details, save jobs, apply, and track application status.
 
 ## Submission Links
 
@@ -14,13 +14,15 @@ Professional job listing platform where users can browse open roles, search by k
 - Incremental role loading (shows first 10, then "Load More").
 - Job details page with application form.
 - Saved Jobs page and local persistence.
+- Application Tracker page with status updates (Applied, Reviewed, Shortlisted, Rejected).
+- Light/Dark mode toggle with theme persistence.
 - 100+ mock roles for realistic browsing and filtering.
 
 ## Project Structure
 
 ```
 job-listing-web-app/
-  client/                 # React + TypeScript frontend
+  client/                 # React + JavaScript frontend
     src/
       components/
       pages/
@@ -84,3 +86,4 @@ The root `404.html` also redirects unknown URLs back to the app entry, so refres
 
 - All source code, assets, and dependencies are included in one public repository.
 - The deployed site is based on the same code present in this repository.
+- Frontend source now uses JavaScript/JSX while preserving the same UI and behavior from the earlier TypeScript version.

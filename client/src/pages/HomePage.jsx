@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import JobSearch from '../components/JobSearch';
 import JobFilters from '../components/JobFilters';
 import JobCard from '../components/JobCard';
-import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 import { fetchJobs, saveJob } from '../services/api';
-import { Job } from '../types';
 
 const PAGE_SIZE = 10;
 
-const normalizeLocation = (value: string): string => {
+const normalizeLocation = (value) => {
     const normalized = value.trim().toLowerCase().replace(/\s+/g, '');
     if (['bangalore', 'bangaluru', 'banglore', 'banglor'].includes(normalized)) {
         return 'banglore';
@@ -18,10 +16,10 @@ const normalizeLocation = (value: string): string => {
     return normalized;
 };
 
-const HomePage: React.FC = () => {
-    const [jobs, setJobs] = useState<Job[]>([]);
+const HomePage = () => {
+    const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [locationFilter, setLocationFilter] = useState('');
     const [jobTypeFilter, setJobTypeFilter] = useState('');
@@ -32,7 +30,7 @@ const HomePage: React.FC = () => {
             try {
                 const jobData = await fetchJobs();
                 setJobs(jobData);
-            } catch (err) {
+            } catch {
                 setError('Failed to fetch jobs');
             } finally {
                 setLoading(false);
@@ -42,18 +40,18 @@ const HomePage: React.FC = () => {
         loadJobs();
     }, []);
 
-    const handleSearch = (query: string) => {
+    const handleSearch = (query) => {
         setSearchQuery(query.trim().toLowerCase());
         setVisibleCount(PAGE_SIZE);
     };
 
-    const handleFilterChange = (location: string, jobType: string) => {
+    const handleFilterChange = (location, jobType) => {
         setLocationFilter(location.trim().toLowerCase());
         setJobTypeFilter(jobType.trim().toLowerCase());
         setVisibleCount(PAGE_SIZE);
     };
 
-    const handleSaveJob = async (jobId: string) => {
+    const handleSaveJob = async (jobId) => {
         try {
             await saveJob(jobId);
         } catch {
@@ -121,7 +119,7 @@ const HomePage: React.FC = () => {
                     <>
                         <div className="jobs-grid">
                             {visibleJobs.map((job) => (
-                            <JobCard key={job.id} job={job} onSave={handleSaveJob} />
+                                <JobCard key={job.id} job={job} onSave={handleSaveJob} />
                             ))}
                         </div>
                         {hasMoreJobs && (

@@ -4,11 +4,10 @@ import JobCard from '../components/JobCard';
 import JobFilters from '../components/JobFilters';
 import JobSearch from '../components/JobSearch';
 import { fetchJobs, saveJob } from '../services/api';
-import { Job } from '../types';
 
 const PAGE_SIZE = 24;
 
-const normalizeLocation = (value: string): string => {
+const normalizeLocation = (value) => {
     const normalized = value.trim().toLowerCase().replace(/\s+/g, '');
     if (['bangalore', 'bangaluru', 'banglore', 'banglor'].includes(normalized)) {
         return 'banglore';
@@ -17,10 +16,10 @@ const normalizeLocation = (value: string): string => {
     return normalized;
 };
 
-const ExploreRolesPage: React.FC = () => {
-    const [jobs, setJobs] = useState<Job[]>([]);
+const ExploreRolesPage = () => {
+    const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [locationFilter, setLocationFilter] = useState('');
     const [jobTypeFilter, setJobTypeFilter] = useState('');
@@ -76,18 +75,18 @@ const ExploreRolesPage: React.FC = () => {
     const visibleJobs = filteredJobs.slice(0, visibleCount);
     const hasMore = visibleCount < filteredJobs.length;
 
-    const handleSearch = (query: string) => {
+    const handleSearch = (query) => {
         setSearchQuery(query.trim().toLowerCase());
         setVisibleCount(PAGE_SIZE);
     };
 
-    const handleFilterChange = (location: string, jobType: string) => {
+    const handleFilterChange = (location, jobType) => {
         setLocationFilter(location);
         setJobTypeFilter(jobType.trim().toLowerCase());
         setVisibleCount(PAGE_SIZE);
     };
 
-    const handleSaveJob = async (jobId: string) => {
+    const handleSaveJob = async (jobId) => {
         try {
             await saveJob(jobId);
         } catch {

@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ApplicationForm from '../components/ApplicationForm';
-import type { ApplicationFormData } from '../components/ApplicationForm';
 import { fetchJobDetails, submitApplication } from '../services/api';
-import { Job } from '../types';
 
-const JobDetailsPage: React.FC = () => {
-    const { jobId } = useParams<{ jobId: string }>();
-    const [job, setJob] = useState<Job | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
-    const [submitMessage, setSubmitMessage] = useState<string>('');
+const JobDetailsPage = () => {
+    const { jobId } = useParams();
+    const [job, setJob] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [submitMessage, setSubmitMessage] = useState('');
 
     useEffect(() => {
         const loadJobDetails = async () => {
             try {
                 const jobData = await fetchJobDetails(jobId);
                 setJob(jobData);
-            } catch (err) {
+            } catch {
                 setError('Failed to fetch job details');
             } finally {
                 setLoading(false);
@@ -27,7 +25,7 @@ const JobDetailsPage: React.FC = () => {
         loadJobDetails();
     }, [jobId]);
 
-    const handleSubmitApplication = async (applicationData: ApplicationFormData) => {
+    const handleSubmitApplication = async (applicationData) => {
         try {
             const result = await submitApplication(applicationData);
             setSubmitMessage(result.message || 'Application submitted successfully.');
