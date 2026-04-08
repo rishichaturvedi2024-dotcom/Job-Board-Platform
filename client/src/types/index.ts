@@ -16,6 +16,8 @@ export interface Application {
     applicantEmail: string;
     resume: string; // URL or path to the resume file
     coverLetter?: string; // Optional
+    submittedAt: string;
+    status: 'applied' | 'reviewed' | 'shortlisted' | 'rejected';
 }
 
 export interface SavedJob {

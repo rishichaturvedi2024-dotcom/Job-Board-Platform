@@ -1,11 +1,26 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { HashRouter as Router, Link, NavLink, Route, Switch } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import JobDetailsPage from './pages/JobDetailsPage';
 import SavedJobsPage from './pages/SavedJobsPage';
 import ExploreRolesPage from './pages/ExploreRolesPage';
+import ApplicationsPage from './pages/ApplicationsPage';
+
+type ThemeMode = 'light' | 'dark';
+
+const THEME_KEY = 'theme-mode';
 
 const App = () => {
+    const [themeMode, setThemeMode] = useState<ThemeMode>(() => {
+        const storedTheme = window.localStorage.getItem(THEME_KEY);
+        return storedTheme === 'dark' ? 'dark' : 'light';
+    });
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', themeMode);
+        window.localStorage.setItem(THEME_KEY, themeMode);
+    }, [themeMode]);
+
     return (
         <Router>
             <div className="app-shell">
@@ -24,7 +39,18 @@ const App = () => {
                             <NavLink to="/saved-jobs" activeClassName="active-nav-link">
                                 Saved Jobs
                             </NavLink>
+                            <NavLink to="/applications" activeClassName="active-nav-link">
+                                Applications
+                            </NavLink>
                         </nav>
+                        <button
+                            type="button"
+                            className="btn btn-ghost theme-toggle"
+                            onClick={() => setThemeMode((prev) => (prev === 'light' ? 'dark' : 'light'))}
+                            aria-label="Toggle dark mode"
+                        >
+                            {themeMode === 'light' ? 'Dark Mode' : 'Light Mode'}
+                        </button>
                     </div>
                 </header>
 
@@ -34,6 +60,7 @@ const App = () => {
                         <Route path="/explore-roles" component={ExploreRolesPage} />
                         <Route path="/job/:jobId" component={JobDetailsPage} />
                         <Route path="/saved-jobs" component={SavedJobsPage} />
+                        <Route path="/applications" component={ApplicationsPage} />
                     </Switch>
                 </main>
             </div>
