@@ -182,6 +182,23 @@ export const updateApplicationStatus = async (applicationId, status) => {
     }
 };
 
+export const removeTrackedApplication = async (applicationId) => {
+    const current = getStoredApplications();
+    const updated = current.filter((application) => application.id !== applicationId);
+    setStoredApplications(updated);
+
+    if (!API_BASE_URL) {
+        return { message: 'Application removed locally.' };
+    }
+
+    try {
+        await axios.delete(`${API_BASE_URL}/applications/${applicationId}`);
+        return { message: 'Application removed successfully.' };
+    } catch {
+        return { message: 'Application removed locally.' };
+    }
+};
+
 export const saveJob = async (jobId) => {
     const savedIds = getSavedJobIds();
     if (!savedIds.includes(jobId)) {

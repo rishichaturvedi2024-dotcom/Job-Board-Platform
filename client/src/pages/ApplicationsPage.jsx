@@ -1,6 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { fetchTrackedApplications, fetchJobs, updateApplicationStatus } from '../services/api';
+import {
+    fetchTrackedApplications,
+    fetchJobs,
+    removeTrackedApplication,
+    updateApplicationStatus,
+} from '../services/api';
 
 const statusOptions = ['applied', 'reviewed', 'shortlisted', 'rejected'];
 
@@ -52,6 +57,16 @@ const ApplicationsPage = () => {
         }
     };
 
+    const handleRemoveApplication = async (applicationId) => {
+        try {
+            await removeTrackedApplication(applicationId);
+            setApplications((prev) => prev.filter((application) => application.id !== applicationId));
+            setMessage('Application removed.');
+        } catch {
+            setError('Could not remove this application right now.');
+        }
+    };
+
     if (loading) {
         return <div className="status-panel">Loading application tracker...</div>;
     }
@@ -93,9 +108,18 @@ const ApplicationsPage = () => {
                                             <h3>{job?.title ?? 'Unknown Role'}</h3>
                                             <p>{job?.company ?? 'Unknown Company'}</p>
                                         </div>
-                                        <span className={`status-pill status-${application.status}`}>
-                                            {formatStatus(application.status)}
-                                        </span>
+                                        <div className="application-card-actions">
+                                            <span className={`status-pill status-${application.status}`}>
+                                                {formatStatus(application.status)}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                className="btn btn-danger-soft remove-application-btn"
+                                                onClick={() => handleRemoveApplication(application.id)}
+                                            >
+                                                Remove
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div className="application-meta">

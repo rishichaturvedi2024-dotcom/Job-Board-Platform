@@ -617,6 +617,14 @@ a {
     align-items: start;
 }
 
+.application-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
 .application-card h3 {
     margin: 0;
     font-family: 'DM Serif Display', serif;
@@ -643,6 +651,27 @@ a {
     font-weight: 700;
     text-transform: capitalize;
     border: 1px solid transparent;
+}
+
+.btn-danger-soft {
+    background: rgba(143, 45, 34, 0.12);
+    color: #8f2d22;
+    border: 1px solid rgba(143, 45, 34, 0.3);
+}
+
+.btn-danger-soft:hover {
+    background: rgba(143, 45, 34, 0.2);
+}
+
+.remove-application-btn {
+    padding: 0.34rem 0.72rem;
+    font-size: 0.78rem;
+}
+
+[data-theme='dark'] .btn-danger-soft {
+    color: #ffb2b2;
+    border-color: rgba(241, 139, 139, 0.45);
+    background: rgba(143, 45, 34, 0.24);
 }
 
 .status-applied {
