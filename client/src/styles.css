@@ -147,6 +147,12 @@ a {
     overflow: hidden;
 }
 
+.explore-hero-panel {
+    background:
+        linear-gradient(120deg, rgba(16, 42, 67, 0.9), rgba(28, 77, 114, 0.85)),
+        url("https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1600&q=80") center / cover;
+}
+
 .eyebrow {
     margin: 0;
     text-transform: uppercase;
@@ -178,6 +184,17 @@ a {
     flex-wrap: wrap;
 }
 
+.quick-filter-row {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.55rem;
+    flex-wrap: wrap;
+}
+
+.quick-filter-row .btn {
+    padding: 0.48rem 0.8rem;
+}
+
 .controls-wrap {
     display: grid;
     gap: 1rem;
@@ -203,6 +220,42 @@ a {
 
 .filter-panel {
     padding: 1rem;
+}
+
+.open-roles-panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 16px rgba(56, 45, 34, 0.06);
+    padding: 1rem;
+}
+
+.open-roles-panel h2 {
+    margin: 0;
+    font-size: 1.12rem;
+}
+
+.open-roles-panel p {
+    margin: 0.45rem 0 0.8rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.role-mode-row {
+    display: flex;
+    gap: 0.45rem;
+    flex-wrap: wrap;
+}
+
+.mode-chip {
+    padding: 0.42rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.mode-chip-active {
+    border-color: var(--brand);
+    color: var(--brand-strong);
+    box-shadow: inset 0 0 0 1px rgba(205, 95, 46, 0.2);
 }
 
 .filter-panel h2,
@@ -328,6 +381,70 @@ a {
     justify-content: space-between;
     align-items: center;
     gap: 0.7rem;
+}
+
+.explore-head-actions {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.view-toggle {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.view-toggle .btn {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.8rem;
+}
+
+.active-view {
+    border-color: var(--brand);
+    color: var(--brand-strong);
+    box-shadow: inset 0 0 0 1px rgba(205, 95, 46, 0.2);
+}
+
+.explore-spotlight {
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    background:
+        linear-gradient(145deg, rgba(12, 70, 112, 0.14), rgba(82, 185, 170, 0.14)),
+        var(--surface);
+    padding: 1.1rem;
+    display: flex;
+    gap: 0.8rem;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 6px 20px rgba(17, 57, 86, 0.12);
+}
+
+.explore-spotlight h2 {
+    margin: 0.2rem 0;
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+}
+
+.explore-spotlight p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.explore-list-view {
+    grid-template-columns: 1fr;
+}
+
+.explore-list-view .job-card {
+    grid-template-columns: 1.2fr auto;
+    align-items: center;
+    gap: 1rem;
+}
+
+.explore-list-view .job-actions {
+    margin-top: 0;
+    justify-content: flex-end;
 }
 
 .count-chip {
@@ -589,6 +706,19 @@ a {
     .application-grid {
         grid-template-columns: 1fr;
     }
+
+    .explore-spotlight {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .explore-list-view .job-card {
+        grid-template-columns: 1fr;
+    }
+
+    .explore-list-view .job-actions {
+        justify-content: flex-start;
+    }
 }
 
 @media (max-width: 560px) {
@@ -619,6 +749,14 @@ a {
     }
 
     .hero-actions .btn {
+        width: 100%;
+    }
+
+    .quick-filter-row {
+        width: 100%;
+    }
+
+    .quick-filter-row .btn {
         width: 100%;
     }
 

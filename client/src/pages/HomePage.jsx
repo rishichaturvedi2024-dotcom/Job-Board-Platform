@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import JobSearch from '../components/JobSearch';
-import JobFilters from '../components/JobFilters';
 import JobCard from '../components/JobCard';
 import { fetchJobs, saveJob } from '../services/api';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 8;
+const MODE_PRIORITY = 'priority';
+const MODE_REMOTE = 'remote';
+const MODE_FRESH = 'fresh';
 
 const normalizeLocation = (value) => {
     const normalized = value.trim().toLowerCase().replace(/\s+/g, '');
@@ -21,8 +23,7 @@ const HomePage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [searchQuery, setSearchQuery] = useState('');
-    const [locationFilter, setLocationFilter] = useState('');
-    const [jobTypeFilter, setJobTypeFilter] = useState('');
+    const [openRoleMode, setOpenRoleMode] = useState(MODE_PRIORITY);
     const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
     useEffect(() => {
@@ -45,9 +46,8 @@ const HomePage = () => {
         setVisibleCount(PAGE_SIZE);
     };
 
-    const handleFilterChange = (location, jobType) => {
-        setLocationFilter(location.trim().toLowerCase());
-        setJobTypeFilter(jobType.trim().toLowerCase());
+    const handleModeChange = (mode) => {
+        setOpenRoleMode(mode);
         setVisibleCount(PAGE_SIZE);
     };
 
@@ -59,22 +59,33 @@ const HomePage = () => {
         }
     };
 
-    const filteredJobs = jobs.filter((job) => {
+    const latestPostedDate = jobs.reduce((latest, job) => {
+        const postedAt = new Date(job.postedDate);
+        return postedAt > latest ? postedAt : latest;
+    }, new Date(0));
+
+    const rolePool = jobs.filter((job) => {
+        if (openRoleMode === MODE_REMOTE) {
+            return normalizeLocation(job.location).includes('remote');
+        }
+
+        if (openRoleMode === MODE_FRESH) {
+            const postedAt = new Date(job.postedDate);
+            const daysDelta = Math.floor((latestPostedDate - postedAt) / (1000 * 60 * 60 * 24));
+            return daysDelta <= 14;
+        }
+
+        return job.jobType.toLowerCase() === 'full-time';
+    });
+
+    const filteredJobs = rolePool.filter((job) => {
         const matchesSearch =
             !searchQuery ||
             job.title.toLowerCase().includes(searchQuery) ||
             job.company.toLowerCase().includes(searchQuery) ||
             job.description.toLowerCase().includes(searchQuery);
-        const normalizedFilterLocation = normalizeLocation(locationFilter);
-        const normalizedJobLocation = normalizeLocation(job.location);
-        const matchesLocation =
-            !normalizedFilterLocation ||
-            normalizedJobLocation.includes(normalizedFilterLocation) ||
-            normalizedFilterLocation.includes(normalizedJobLocation);
-        const matchesJobType =
-            !jobTypeFilter || job.jobType.toLowerCase() === jobTypeFilter;
 
-        return matchesSearch && matchesLocation && matchesJobType;
+        return matchesSearch;
     });
 
     const visibleJobs = filteredJobs.slice(0, visibleCount);
@@ -104,7 +115,33 @@ const HomePage = () => {
 
             <section className="controls-wrap" id="open-roles">
                 <JobSearch onSearch={handleSearch} />
-                <JobFilters onFilterChange={handleFilterChange} />
+                <div className="open-roles-panel">
+                    <h2>Open Roles Feed</h2>
+                    <p>Home page is a curated shortlist. Use Explore for full-catalog discovery.</p>
+                    <div className="role-mode-row" role="group" aria-label="Open role mode">
+                        <button
+                            type="button"
+                            className={`btn btn-ghost mode-chip ${openRoleMode === MODE_PRIORITY ? 'mode-chip-active' : ''}`}
+                            onClick={() => handleModeChange(MODE_PRIORITY)}
+                        >
+                            Priority Full-Time
+                        </button>
+                        <button
+                            type="button"
+                            className={`btn btn-ghost mode-chip ${openRoleMode === MODE_REMOTE ? 'mode-chip-active' : ''}`}
+                            onClick={() => handleModeChange(MODE_REMOTE)}
+                        >
+                            Remote First
+                        </button>
+                        <button
+                            type="button"
+                            className={`btn btn-ghost mode-chip ${openRoleMode === MODE_FRESH ? 'mode-chip-active' : ''}`}
+                            onClick={() => handleModeChange(MODE_FRESH)}
+                        >
+                            Fresh 14 Days
+                        </button>
+                    </div>
+                </div>
             </section>
 
             <section className="jobs-feed">
