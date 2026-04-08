@@ -2,9 +2,8 @@
 
 Professional job listing platform where users can browse open roles, search by keywords, filter by location and job type, view role details, save jobs, apply, and track application status.
 
-## Submission Links
+## Submission Link
 
-- GitHub Repository: https://github.com/rishichaturvedi2024-dotcom/Job-Board-Platform
 - Live Website (GitHub Pages): https://rishichaturvedi2024-dotcom.github.io/Job-Board-Platform/
 
 ## Features Implemented
